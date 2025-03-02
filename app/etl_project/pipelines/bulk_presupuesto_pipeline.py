@@ -1,9 +1,13 @@
 import os
 from dotenv import load_dotenv
-from etl_project.assets.financial_etl import extract_financial_data, transform_financial_data
+from etl_project.assets.financial_etl import (
+    extract_financial_data,
+    transform_financial_data,
+)
 from etl_project.assets.pipeline_logging import PipelineLogging
 from etl_project.connectors.postgresql import PostgreSqlClient
 from sqlalchemy import Table, Column, String, MetaData, Float
+
 
 def run_etl_for_all_files(directory_path, connection_string, table_name):
     """
@@ -16,8 +20,12 @@ def run_etl_for_all_files(directory_path, connection_string, table_name):
     """
 
     # Initialize logging
-    pipeline_logging = PipelineLogging(pipeline_name="BulkFinancialDataPipeline", log_folder_path="./logs")
-    pipeline_logging.logger.info(f"100 | Starting bulk ETL process for files in {directory_path}")
+    pipeline_logging = PipelineLogging(
+        pipeline_name="BulkFinancialDataPipeline", log_folder_path="./logs"
+    )
+    pipeline_logging.logger.info(
+        f"100 | Starting bulk ETL process for files in {directory_path}"
+    )
 
     # PostgreSQL Connection
     postgresql_client = PostgreSqlClient(
@@ -37,11 +45,17 @@ def run_etl_for_all_files(directory_path, connection_string, table_name):
             try:
                 # Extract
                 extracted_df = extract_financial_data(file_path)
-                pipeline_logging.logger.success(f"200 | Data extraction completed for {filename}")
+                pipeline_logging.logger.success(
+                    f"200 | Data extraction completed for {filename}"
+                )
 
                 # Transform
-                transformed_df = transform_financial_data(extracted_df, year=2024, quarter='Q4')
-                pipeline_logging.logger.success(f"200 | Data transformation completed for {filename}")
+                transformed_df = transform_financial_data(
+                    extracted_df, year=2024, quarter="Q4"
+                )
+                pipeline_logging.logger.success(
+                    f"200 | Data transformation completed for {filename}"
+                )
 
                 # Define PostgreSQL table
                 metadata = MetaData()
@@ -56,14 +70,23 @@ def run_etl_for_all_files(directory_path, connection_string, table_name):
                 )
 
                 # Load
-                postgresql_client.upsert(data=transformed_df.to_dict(orient='records'), table=table, metadata=metadata)
-                pipeline_logging.logger.success(f"200 | Data loaded into PostgreSQL for {filename}")
+                postgresql_client.upsert(
+                    data=transformed_df.to_dict(orient="records"),
+                    table=table,
+                    metadata=metadata,
+                )
+                pipeline_logging.logger.success(
+                    f"200 | Data loaded into PostgreSQL for {filename}"
+                )
 
             except Exception as e:
-                pipeline_logging.logger.error(f"500 | ETL process failed for {filename}: {e}")
+                pipeline_logging.logger.error(
+                    f"500 | ETL process failed for {filename}: {e}"
+                )
                 continue
 
     pipeline_logging.logger.info("200 | Bulk ETL process completed for all files.")
+
 
 if __name__ == "__main__":
     # Load environment variables
