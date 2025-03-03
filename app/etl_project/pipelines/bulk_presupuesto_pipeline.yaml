@@ -1,0 +1,8 @@
+name: presupuesto_pipeline_bulk
+config:
+  log_folder_path: "./etl_project/logs"
+  year: 2024
+  quarters: [Q1, Q2, Q3, Q4]
+schedule:
+  run_seconds: 8
+  poll_seconds: 2
