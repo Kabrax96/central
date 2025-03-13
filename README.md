@@ -13,31 +13,54 @@ This ETL (Extract, Transform, Load) pipeline automates the process of extracting
 ## 📁 **Project Structure**
 
 ```
-etl_project/
+app/
 │
-├── assets/                           # Core ETL functions and utilities
-│   ├── presupuesto_etl.py            # Extract, Transform, Load functions
-│   └── pipeline_logging.py           # Logging utility (Loguru-based)
+├── etl_project/                      # Main ETL project directory
+│   │
+│   ├── assets/                        # Core ETL utilities and helper scripts
+│   │   ├── __init__.py
+│   │   ├── metadata_logging.py        # Metadata logging functions
+│   │   ├── pipeline_logging.py        # Logging utility (Loguru-based)
+│   │   ├── presupuesto_etl.py         # Extract, Transform, Load (ETL) functions
+│   │
+│   ├── connectors/                    # Database connectors
+│   │   ├── __init__.py
+│   │   ├── postgresql.py               # PostgreSQL client connector
+│   │
+│   ├── data/                          # Data storage
+│   │   ├── presupuestos/              # Financial data files (CSV/Excel)
+│   │   │   ├── Nuevo_Leon_Financials_2024_Q1_daily.csv
+│   │   │   ├── Nuevo_Leon_Financials_2024_Q2_daily.csv
+│   │   │   ├── Nuevo_Leon_Financials_2024_Q3_daily.csv
+│   │   │   ├── Nuevo_Leon_Financials_2024_Q4_daily.csv
+│   │
+│   ├── logs/                          # Log storage
+│   │   ├── .gitkeep                   # Placeholder to ensure directory exists in repo
+│   │
+│   ├── pipelines/                     # ETL orchestrators
+│   │   ├── __init__.py
+│   │   ├── bulk_presupuesto_pipeline.py  # ETL pipeline for multiple files
+│   │   ├── bulk_presupuesto_pipeline.yaml  # Config for bulk pipeline
+│   │   ├── presupuesto_pipeline.py     # ETL pipeline for a single file
+│   │   ├── presupuesto_pipeline.yaml   # Config for single pipeline
+│   │
+│   ├── etl_project_tests/             # Unit tests for ETL project
+│   │   ├── assets/
+│   │   │   ├── __init__.py
+│   │   │   ├── test_presupuesto_etl.py  # Tests for ETL functions
+│   │   ├── connectors/
+│   │   │   ├── test_postgresql.py      # Tests for PostgreSQL connection
+│   │   ├── data/
+│   │   │   ├── __init__.py
 │
-├── connectors/                       # Database connectors
-│   └── postgresql.py                 # PostgreSQL client connector
+├── data/                              # Additional raw data storage
 │
-├── pipelines/                        # ETL orchestrators
-│   ├── presupuesto_pipeline.py       # ETL for single file
-│   └── bulk_presupuesto_pipeline.py  # ETL for processing multiple files
-│
-├── data/                             # Raw data files
-│   └── financial_files/              # Contains all CSV/Excel files
-│
-├── logs/                             # Generated logs from ETL process
-│   └── pipeline_logging<timestamp>.log
-│
-├── .env                              # Environment variables (DB credentials)
-│
-└── requirements.txt                  # Project dependencies
-```
+├── .env                               # Environment variables (DB credentials)
+├── .gitignore                         # Files and folders to ignore in Git
+├── Dockerfile                         # Docker setup for containerization
+├── README.md                          # Project documentation
+├── requirements.txt                    # Python dependencies
 
----
 
 ## ⚙️ **Setup & Installation**
 
